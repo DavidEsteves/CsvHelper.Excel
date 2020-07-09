@@ -1,4 +1,4 @@
-# Csv Helper update to version 15.0.5, net46
+# Csv Helper updated to version 15.0.5, net46
 
 [![Build status](https://ci.appveyor.com/api/projects/status/bqh412kdla4peqsw?svg=true)](https://ci.appveyor.com/project/christophano/csvhelper-excel)
 # Csv Helper for Excel
