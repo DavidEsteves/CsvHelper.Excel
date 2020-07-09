@@ -2,14 +2,17 @@
 namespace CsvHelper.Excel
 {
     using System;
+    using System.Globalization;
     using System.Linq;
+    using System.Threading.Tasks;
     using ClosedXML.Excel;
+    using CsvHelper;
     using CsvHelper.Configuration;
 
     /// <summary>
     /// Parses an Excel file.
     /// </summary>
-    public class ExcelParser : ICsvParser
+    public class ExcelParser : IParser
     {
         private readonly bool shouldDisposeWorkbook;
         private readonly IXLRangeBase range;
@@ -77,7 +80,7 @@ namespace CsvHelper.Excel
         {
             Workbook = range.Worksheet.Workbook;
             this.range = range;
-            Configuration = configuration ?? new CsvConfiguration();
+            Configuration = configuration ?? new CsvConfiguration(CultureInfo.InvariantCulture);
             FieldCount = range.CellsUsed().Max(cell => cell.Address.ColumnNumber) - range.CellsUsed().Min(cell => cell.Address.ColumnNumber) + 1;
         }
 
@@ -130,6 +133,12 @@ namespace CsvHelper.Excel
         /// Gets the raw row for the current record that was parsed.
         /// </summary>
         public virtual string RawRecord => range.AsRange().Row(Row).Cells(1, FieldCount).ToString();
+
+        public ReadingContext Context => throw new NotImplementedException();
+
+        IParserConfiguration IParser.Configuration => throw new NotImplementedException();
+
+        public IFieldReader FieldReader => throw new NotImplementedException();
 
         /// <summary>
         /// Reads a record from the Excel file.
@@ -194,6 +203,11 @@ namespace CsvHelper.Excel
             {
                 throw new ObjectDisposedException(GetType().ToString());
             }
+        }
+
+        public Task<string[]> ReadAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

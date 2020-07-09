@@ -2,14 +2,17 @@
 namespace CsvHelper.Excel
 {
     using System;
+    using System.Globalization;
     using System.Text.RegularExpressions;
+    using System.Threading.Tasks;
     using ClosedXML.Excel;
+    using CsvHelper;
     using CsvHelper.Configuration;
 
     /// <summary>
     /// Defines methods used to serialize data into an Excel (2007+) file.
     /// </summary>
-    public class ExcelSerializer : ICsvSerializer
+    public class ExcelSerializer : ISerializer
     {
         private readonly string path;
         private readonly bool disposeWorkbook;
@@ -102,8 +105,8 @@ namespace CsvHelper.Excel
         {
             Workbook = range.Worksheet.Workbook;
             this.range = range;
-            Configuration = configuration ?? new CsvConfiguration();
-            Configuration.QuoteNoFields = true;
+            Configuration = configuration ?? new CsvConfiguration(CultureInfo.InvariantCulture);
+            //Configuration.QuoteNoFields = true;
         }
 
         /// <summary>
@@ -128,6 +131,10 @@ namespace CsvHelper.Excel
         /// Gets and sets the number of columns to offset the start position from.
         /// </summary>
         public int ColumnOffset { get; set; } = 0;
+
+        public WritingContext Context => throw new NotImplementedException();
+
+        ISerializerConfiguration ISerializer.Configuration => throw new NotImplementedException();
 
         /// <summary>
         /// Writes a record to the Excel file.
@@ -183,7 +190,7 @@ namespace CsvHelper.Excel
             if (disposed) return;
             if (disposing)
             {
-                if (disposeWorksheet) range.Worksheet.Dispose();
+                //if (disposeWorksheet) range.Worksheet.Dispose();
                 if (disposeWorkbook)
                 {
                     Workbook.SaveAs(path);
@@ -205,6 +212,21 @@ namespace CsvHelper.Excel
             {
                 throw new ObjectDisposedException(GetType().ToString());
             }
+        }
+
+        public Task WriteAsync(string[] record)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void WriteLine()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task WriteLineAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
